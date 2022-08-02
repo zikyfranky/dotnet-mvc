@@ -10,9 +10,10 @@ namespace Vidly.Models
 
         public ApplicationDbContext()
         {
-            var folder = Environment.SpecialFolder.LocalApplicationData;
-            var path = Environment.GetFolderPath(folder);
-            DbPath = System.IO.Path.Join(path, "app.db");
+            // var folder = Environment.SpecialFolder.LocalApplicationData;
+            var folder = Directory.GetCurrentDirectory();
+            var path = Path.Join(folder, "APP_DATA");
+            DbPath = Path.Join(path, "Vidly.db");
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
