@@ -10,13 +10,22 @@ namespace Vidly.Controllers
 {
     public class CustomersController : Controller
     {
-        public List<Customer> customers = new List<Customer> {
-            new Customer { Id=1, Name = "John Smith" },
-            new Customer { Id=2, Name = "Mary Jack" }
-        };
+        private ApplicationDbContext _context;
+
+        public CustomersController()
+        {
+            _context = new ApplicationDbContext();
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            _context.Dispose();
+        }
 
         public IActionResult Index()
         {
+            var customers = _context.Customers.ToList();
+
             var viewModel = new CustomersViewModel
             {
                 Customers = customers
@@ -28,7 +37,8 @@ namespace Vidly.Controllers
         [Route("Customers/Details/{id}")]
         public IActionResult Details(int id)
         {
-            var customer = customers.Find(c => c.Id == id);
+            var customer = _context.Customers.SingleOrDefault(c => c.Id == id);
+
             if (customer == null)
             {
                 return NotFound();
